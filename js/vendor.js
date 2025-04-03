@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function animateCursor() {
         if (isMoving) {
-            gsap.to(cursor, { duration: 0.5, x: mouse.x, y: mouse.y, ease: 'power2.out' });
+            gsap.to(cursor, { duration: 0.2, x: mouse.x, y: mouse.y, ease: 'power2.out' });
         }
         requestAnimationFrame(animateCursor);
     }
@@ -345,3 +345,38 @@ jQuery('.colorbox ul li').on("click",function(){
 //       ease: "power2.out",
 //     });
 //   });
+
+// Function to duplicate the content dynamically for seamless repetition
+const marquee = document.querySelector(".marqueeScroll");
+const clone = marquee.innerHTML;
+marquee.innerHTML += clone;
+
+// Left-to-Right Marquee Animation with Infinite Repeat
+const marqueeAnimation = gsap.to(".marqueeScroll", {
+  xPercent: -100, // Move half the width (adjust if more clones are added)
+  duration: 10,
+  ease: "linear",
+  repeat: -1,
+});
+
+// Scroll Trigger to Reverse Animation on Scroll Up
+ScrollTrigger.create({
+  trigger: ".marqueeContainer",
+  start: "top top",
+  end: "bottom+=100%",
+  scrub: true,
+  onEnter: () => marqueeAnimation.play(),
+  onLeave: () => marqueeAnimation.reverse(),
+  onEnterBack: () => marqueeAnimation.play(),
+  onLeaveBack: () => marqueeAnimation.reverse(),
+});
+
+// Pause marquee animation on hover
+marquee.addEventListener("mouseenter", () => {
+    marqueeAnimation.pause();
+  });
+
+  // Resume marquee animation on hover out
+  marquee.addEventListener("mouseleave", () => {
+    marqueeAnimation.resume();
+  });
